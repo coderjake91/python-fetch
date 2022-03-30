@@ -44,6 +44,8 @@ def geo_code(address_to_convert):
 
     data = response.json()
 
-    #return {"latitute": ..., "longitute": ...} dictionary
+    #return {"latitude": ..., "longitude": ...} dictionary
     return data["results"][0]["location"]
+
+
 
