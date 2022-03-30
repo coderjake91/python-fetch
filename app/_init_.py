@@ -1,4 +1,5 @@
 import requests
+from urllib.parse import urlencode
 
 #distance matrix function that accepts two sets of coordinates {latitude, longitude}, then utilizes TrueWay Matrix API to compute distances (in meters) and travel duration times between those two locations (assuming user is driving a car)
 def distance_matrix(origin, destination):
@@ -25,4 +26,24 @@ def distance_matrix(origin, destination):
 
     #return commute distance in miles and time in minutes rounded to two decimal places
     return commute
+
+
+#function that accepts an address string, then uses the TrueWay Geocoding API to convert the address string into map coordinates {latitude, longitude}
+def geo_code(address_to_convert):
+
+    #https://urllib3.readthedocs.io/en/latest/user-guide.html use urlencode from urllib.parse package, convert address string to a query parameter for the request
+    encoded_address = urlencode({"address": "85 10th Ave, New York, NY 10011"})
+
+    response = requests.get(
+        f'https://trueway-geocoding.p.rapidapi.com/Geocode?{encoded_address}&language=en',
+        headers={
+            "x-rapidapi-key": "1b3e17da97msh8784bd378de9d66p17b153jsn255eb2ee1914",
+		    "x-rapidapi-host": "trueway-geocoding.p.rapidapi.com"
+        }
+    )
+
+    data = response.json()
+
+    #return {"latitute": ..., "longitute": ...} dictionary
+    return data["results"][0]["location"]
 
