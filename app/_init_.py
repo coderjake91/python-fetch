@@ -15,7 +15,7 @@ def distance_matrix(origin, destination):
 		    "x-rapidapi-host": "trueway-matrix.p.rapidapi.com"
         }
     )
-
+    
     data = response.json()
 
     commute = {
@@ -32,7 +32,7 @@ def distance_matrix(origin, destination):
 def geo_code(address_to_convert):
 
     #https://urllib3.readthedocs.io/en/latest/user-guide.html use urlencode from urllib.parse package, convert address string to a query parameter for the request
-    encoded_address = urlencode({"address": "85 10th Ave, New York, NY 10011"})
+    encoded_address = urlencode({"address": address_to_convert})
 
     response = requests.get(
         f'https://trueway-geocoding.p.rapidapi.com/Geocode?{encoded_address}&language=en',
@@ -47,5 +47,20 @@ def geo_code(address_to_convert):
     #return {"latitude": ..., "longitude": ...} dictionary
     return data["results"][0]["location"]
 
+#function that accepts an area code, state, city, search radius, and number of desired listings to return from Reality in US API
+def search_listings(area_code, state, city, search_radius, response_limit):
+    query_string = urlencode({"state_code": state, "city": city, "limit": response_limit, "offset": "0", "postal_code": area_code, "sort": "relelvance", "radius": search_radius})
+
+    response = requests.get(
+        f'https://realty-in-us.p.rapidapi.com/properties/list-for-rent?{query_string}',
+        headers={
+            "x-rapidapi-key": "1b3e17da97msh8784bd378de9d66p17b153jsn255eb2ee1914",
+		    "x-rapidapi-host": "realty-in-us.p.rapidapi.com"
+        }
+    )
+
+    data = response.json()
+
+    return data["listings"]
 
 

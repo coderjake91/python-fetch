@@ -1,6 +1,6 @@
 import pytest
 import requests
-from _init_ import distance_matrix, geo_code
+from _init_ import distance_matrix, geo_code, search_listings
 
 
 ##faux user data simulating input from the application form
@@ -40,3 +40,12 @@ def test_geo_code():
 
     assert type(location["lat"]) == float
     assert type(location["lng"]) == float
+
+def test_search_listings():
+    apartment_listings = search_listings(testData["origin"]["area_code"], 
+                                        testData["origin"]["state"], 
+                                        testData["origin"]["state"], 
+                                        testData["searchParams"]["search_radius"],
+                                        testData["searchParams"]["response_limit"])
+    
+    assert len(apartment_listings) == testData["searchParams"]["response_limit"]
